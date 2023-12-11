@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"server/db"
 	"server/internal/user"
+	"server/internal/user/ws"
+	"server/router"
 )
 
 func main() {
@@ -15,6 +16,12 @@ func main() {
 
 	userRep := user.NewRepository(dbConn.GetDB())
 	userSvc := user.NewService(userRep)
-	fmt.Println(userSvc)
-	// userHandler := user.NewHandler(userSvc)
+	userHandler := user.NewHandler(userSvc)
+
+	hub := ws.NewHub()
+	wsHandler := ws.NewHandler(hub)
+	go hub.Run()
+
+	router.InitRouter(userHandler, wsHandler)
+	router.Start("0.0.0.0:8080")
 }
