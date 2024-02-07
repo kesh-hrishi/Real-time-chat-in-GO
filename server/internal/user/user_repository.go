@@ -12,13 +12,13 @@ type DBTX interface {
 	QueryRowContext(context.Context, string, ...interface{}) *sql.Row
 }
 
-type repository struct {
-	db DBTX
-}
-
 func NewRepository(db DBTX) Repository {
 
 	return &repository{db: db}
+}
+
+type repository struct {
+	db DBTX
 }
 
 func (r *repository) CreateUser(ctx context.Context, user *User) (*User, error) {
