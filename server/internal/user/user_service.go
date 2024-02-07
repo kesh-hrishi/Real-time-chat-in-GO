@@ -12,13 +12,6 @@ type service struct {
 	timeout time.Duration
 }
 
-func NewService(repository Repository) Service {
-	return &service{
-		repository,
-		time.Duration(2) * time.Second,
-	}
-}
-
 func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUserRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
@@ -46,4 +39,11 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUser
 	}
 
 	return res, nil
+}
+
+func NewService(repository Repository) Service {
+	return &service{
+		repository,
+		time.Duration(2) * time.Second,
+	}
 }
